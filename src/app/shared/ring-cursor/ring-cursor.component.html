@@ -2,5 +2,5 @@
   <div class="cursor-core-dot"></div>
 </app-cursor-locator>
 <app-cursor-locator [enableTransition]="true">
-  <div class="cursor-ring"></div>
+  <div class="cursor-ring" [ngStyle]="{ width: ringSize + 'px', height: ringSize + 'px' }"></div>
 </app-cursor-locator>

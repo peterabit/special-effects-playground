@@ -1,5 +1,4 @@
 $dot-size: 10px;
-$ring-size: 50px;
 $ring-border: 2px solid cadetblue;
 
 .cursor-core-dot {
@@ -10,8 +9,7 @@ $ring-border: 2px solid cadetblue;
 }
 
 .cursor-ring {
-  width: $ring-size;
-  height: $ring-size;
   border: $ring-border;
   border-radius: 50%;
+  transition: width 0.8s cubic-bezier(0.19, 1, 0.22, 1), height 0.8s cubic-bezier(0.19, 1, 0.22, 1);
 }
