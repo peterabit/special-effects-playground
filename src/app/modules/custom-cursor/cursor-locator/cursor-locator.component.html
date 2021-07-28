@@ -1,0 +1,9 @@
+<div
+  class="cursor-replace-container"
+  [style.transform]="sticky ? transform : ''"
+  [style.transition]="enableTransition ? _transition : ''"
+>
+  <div ngc [ngClass]="{ 'cursor-replace-content': sticky }">
+    <ng-content></ng-content>
+  </div>
+</div>

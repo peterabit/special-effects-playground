@@ -1,0 +1,11 @@
+.cursor-replace-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000000;
+  user-select: none;
+}
+
+.cursor-replace-content {
+  transform: translate(-50%, -50%);
+}

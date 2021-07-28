@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { CustomCursorService } from './modules/custom-cursor/custom-cursor.service';
+import { RingCursorComponent } from './shared/ring-cursor/ring-cursor.component';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'special-effects-playground';
+  constructor(cursor: CustomCursorService) {
+    cursor.replace(RingCursorComponent)
+  }
 }
