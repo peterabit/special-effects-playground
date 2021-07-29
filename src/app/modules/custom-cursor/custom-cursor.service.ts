@@ -1,8 +1,6 @@
-import { DOCUMENT } from '@angular/common';
 import {
-  ApplicationRef,
-  ComponentFactoryResolver,
   ComponentRef,
+  EmbeddedViewRef,
   Inject,
   Injectable,
   InjectionToken,
@@ -11,51 +9,68 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { ComponentPortal, ComponentType, TemplatePortal } from '@angular/cdk/portal';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { CustomCursorContainerComponent } from './custom-cursor-container.component';
 import { CustomCursorConfig } from './custom-cursor-config';
+import { CustomCursorRef } from './custom-cursor-ref';
 
 export const CURSOR_REPLACEMENT_DEFAULT_OPTIONS = new InjectionToken<CustomCursorConfig>('CustomCursorConfig');
 
 export const CURSOR_REPLACEMENT_DATA = new InjectionToken<any>('custom-cursor-data');
 
+let uId = 0;
+
 @Injectable({
   providedIn: 'root',
 })
 export class CustomCursorService {
-  cursorContainer?: ComponentRef<CustomCursorContainerComponent>;
+  cuscomCursorRefs: CustomCursorRef<any>[] = [];
 
   constructor(
-    private appRef: ApplicationRef,
     private injector: Injector,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    @Inject(DOCUMENT) private document: Document,
+    private overlay: Overlay,
     @Optional() @Inject(CURSOR_REPLACEMENT_DEFAULT_OPTIONS) private defaultOptions: CustomCursorConfig | undefined
   ) {}
 
-  replace<T, D = any>(componentOrTemplateRef: ComponentType<T> | TemplateRef<T>, config?: CustomCursorConfig<D>) {
+  create<T, D = any>(
+    componentOrTemplateRef: ComponentType<T> | TemplateRef<T>,
+    config?: CustomCursorConfig<D>
+  ): CustomCursorRef<T> {
     config = { ...(this.defaultOptions || new CustomCursorConfig()), ...config };
 
-    if (this.cursorContainer) {
-      this.attachCursorContent<T>(componentOrTemplateRef, this.cursorContainer, config);
+    const overlayRef = this.createOverlay();
+    const container = this.attachCursorContainer<D>(overlayRef, config);
+    const contentRef = this.attachCursorContent<T>(componentOrTemplateRef, container.instance, config);
+
+    const customCursorRef = new CustomCursorRef(this.uId, contentRef, container.instance, overlayRef, config);
+    this.cuscomCursorRefs.push(customCursorRef);
+    customCursorRef.afterDestroy.subscribe(() => this.destroyCustomCursor(customCursorRef));
+
+    return customCursorRef;
+  }
+
+  destroy(idOrRef: string | CustomCursorRef<any>) {
+    if (idOrRef instanceof CustomCursorRef) {
+      this.destroyCustomCursor(idOrRef);
     } else {
-      this.cursorContainer = this.attachCursorContainer<D>(config);
-      this.attachCursorContent<T>(componentOrTemplateRef, this.cursorContainer, config);
+      const cursorRef = this.cuscomCursorRefs.find(({ id }) => id === idOrRef);
+
+      if (cursorRef) {
+        this.destroyCustomCursor(cursorRef);
+      }
     }
   }
 
-  hide() {
-    if (this.cursorContainer) {
-      this.cursorContainer.instance.hide();
-    }
+  get uId() {
+    return `custom-curser-${uId++}`;
   }
 
-  show() {
-    if (this.cursorContainer) {
-      this.cursorContainer.instance.show();
-    }
+  private destroyCustomCursor(cursorRef: CustomCursorRef<any>) {
+    cursorRef.overlayRef.detach();
+    this.cuscomCursorRefs = this.cuscomCursorRefs.filter(ref => ref !== cursorRef);
   }
 
-  private attachCursorContainer<D>(config: CustomCursorConfig<D>) {
+  private attachCursorContainer<D>(overlay: OverlayRef, config: CustomCursorConfig<D>) {
     const injector = Injector.create({
       providers: [
         {
@@ -66,22 +81,20 @@ export class CustomCursorService {
       parent: this.injector,
     });
 
-    const compFactory = this.componentFactoryResolver.resolveComponentFactory(CustomCursorContainerComponent);
-    const cursorContainer = compFactory.create(injector);
+    const containerRef = overlay.attach(
+      new ComponentPortal<CustomCursorContainerComponent>(CustomCursorContainerComponent, null, injector)
+    );
 
-    this.document.body.appendChild(cursorContainer.instance.viewContainerRef.element.nativeElement);
-    this.appRef.attachView(cursorContainer.hostView);
-
-    return cursorContainer;
+    return containerRef;
   }
 
   private attachCursorContent<T>(
     componentOrTemplateRef: ComponentType<T> | TemplateRef<T>,
-    container: ComponentRef<CustomCursorContainerComponent>,
+    container: CustomCursorContainerComponent,
     config: CustomCursorConfig
-  ) {
+  ): ComponentRef<T> | EmbeddedViewRef<T> {
     if (componentOrTemplateRef instanceof TemplateRef) {
-      container.instance.attachPortal<T>(new TemplatePortal<T>(componentOrTemplateRef, null!, config.data));
+      return container.attach<T>(new TemplatePortal<T>(componentOrTemplateRef, null!, config.data));
     } else {
       const injector = Injector.create({
         providers: [
@@ -93,9 +106,13 @@ export class CustomCursorService {
         parent: this.injector,
       });
 
-      container.instance.attachPortal(
-        new ComponentPortal<T>(componentOrTemplateRef, config.viewContainerRef, injector)
-      );
+      return container.attach<T>(new ComponentPortal<T>(componentOrTemplateRef, config.viewContainerRef, injector));
     }
+  }
+
+  private createOverlay(): OverlayRef {
+    return this.overlay.create({
+      hasBackdrop: false,
+    });
   }
 }

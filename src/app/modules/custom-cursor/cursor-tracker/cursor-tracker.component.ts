@@ -8,6 +8,7 @@ import {
   EventEmitter,
   SimpleChanges,
   OnChanges,
+  InjectionToken,
 } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
@@ -19,12 +20,12 @@ export interface CursorMoveEvent {
 }
 
 @Component({
-  selector: 'app-cursor-locator',
-  templateUrl: './cursor-locator.component.html',
-  styleUrls: ['./cursor-locator.component.scss'],
+  selector: 'app-cursor-tracker',
+  templateUrl: './cursor-tracker.component.html',
+  styleUrls: ['./cursor-tracker.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CursorLocatorComponent implements OnChanges {
+export class CursorTrackerComponent implements OnChanges {
   @Input() sticky = true;
 
   @Input() enableTransition = false;

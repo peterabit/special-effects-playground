@@ -1,5 +1,13 @@
-import { Component, ChangeDetectionStrategy, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
-import { ComponentPortal, Portal, TemplatePortal } from '@angular/cdk/portal';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ViewContainerRef,
+  ChangeDetectorRef,
+  ViewChild,
+  ComponentRef,
+  EmbeddedViewRef,
+} from '@angular/core';
+import { CdkPortalOutlet, ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { CustomCursorConfig } from './custom-cursor-config';
 
 @Component({
@@ -9,7 +17,7 @@ import { CustomCursorConfig } from './custom-cursor-config';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomCursorContainerComponent {
-  currentPortal?: Portal<unknown>;
+  @ViewChild(CdkPortalOutlet, { static: true }) portalOutlet?: CdkPortalOutlet;
 
   isShow = true;
 
@@ -29,7 +37,7 @@ export class CustomCursorContainerComponent {
     this.cd.markForCheck();
   }
 
-  attachPortal<T>(protal: TemplatePortal<T> | ComponentPortal<T>) {
-    this.currentPortal = protal;
+  attach<T>(protal: TemplatePortal<T> | ComponentPortal<T>): ComponentRef<T> | EmbeddedViewRef<T> {
+    return this.portalOutlet?.attach(protal);
   }
 }
