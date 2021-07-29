@@ -1,0 +1,12 @@
+.cursor-replace-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  user-select: none;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.cursor-replace-content {
+  transform: translate(-50%, -50%);
+}

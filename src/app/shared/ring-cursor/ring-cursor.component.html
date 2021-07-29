@@ -1,0 +1,18 @@
+<app-cursor-tracker *ngIf="!isFix">
+    <div
+        class="cursor-core-dot"
+        [style.backgroundColor]="color"
+    ></div>
+</app-cursor-tracker>
+<app-cursor-tracker
+    [tracking]="!isFix"
+    [enableTransition]="true"
+    [x]="x"
+    [y]="y"
+    (cursorMove)="onCursorMove($event)"
+>
+    <div
+        class="cursor-ring"
+        [ngStyle]="{ width: ringSize + 'px', height: ringSize + 'px', borderColor: color }"
+    ></div>
+</app-cursor-tracker>
