@@ -8,7 +8,6 @@ import {
   EventEmitter,
   SimpleChanges,
   OnChanges,
-  InjectionToken,
 } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
@@ -26,7 +25,7 @@ export interface CursorMoveEvent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CursorTrackerComponent implements OnChanges {
-  @Input() sticky = true;
+  @Input() tracking = true;
 
   @Input() enableTransition = false;
 
@@ -34,16 +33,16 @@ export class CursorTrackerComponent implements OnChanges {
   // tslint:disable-next-line: variable-name
   _transition: SafeStyle;
 
-  @Output() cursorMove = new EventEmitter<CursorMoveEvent>();
+  @Input() x = 0;
+  @Input() y = 0;
 
-  x = 0;
-  y = 0;
+  @Output() cursorMove = new EventEmitter<CursorMoveEvent>();
 
   get transform() {
     return `translate(${this.x}px, ${this.y}px)`;
   }
 
-  constructor(private cd: ChangeDetectorRef, private domSanitizer: DomSanitizer) {
+  constructor(public cd: ChangeDetectorRef, private domSanitizer: DomSanitizer) {
     this._transition = domSanitizer.bypassSecurityTrustStyle(this.transition);
   }
 
@@ -55,6 +54,8 @@ export class CursorTrackerComponent implements OnChanges {
 
   @HostListener('window:mousemove', ['$event'])
   private mousemoveHandler(e: MouseEvent) {
+    if (!this.tracking) return;
+
     this.x = e.clientX;
     this.y = e.clientY;
 
@@ -63,7 +64,5 @@ export class CursorTrackerComponent implements OnChanges {
       y: this.y,
       mouseMoveEvent: e,
     });
-
-    this.cd.markForCheck();
   }
 }
