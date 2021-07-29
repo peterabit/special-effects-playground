@@ -2,10 +2,12 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  HostListener,
   Input,
-  OnInit,
+  Output,
   QueryList,
   ViewChildren,
+  EventEmitter,
 } from '@angular/core';
 import {
   CursorMoveEvent,
@@ -18,20 +20,47 @@ import {
   styleUrls: ['./ring-cursor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RingCursorComponent implements OnInit {
+export class RingCursorComponent {
   @ViewChildren(CursorTrackerComponent) cursorTrackers?: QueryList<CursorTrackerComponent>;
 
   @Input() ringSize = 50;
 
   @Input() color = 'cadetblue';
 
+  @Output() cursorMove = new EventEmitter<{ x: number; y: number }>();
+
   isFix = false;
 
-  fixPosition = { x: 0, y: 0 };
+  get x(): number {
+    return this._x;
+  }
+
+  set x(v: number) {
+    if (this._x !== v) {
+      this._x = v;
+      this.cursorMove.emit({ x: v, y: this.y });
+    }
+  }
+
+  _x = 0;
+
+  get y(): number {
+    return this._y;
+  }
+
+  set y(v: number) {
+    if (this._y !== v) {
+      this._y = v;
+      this.cursorMove.emit({ y: v, x: this.x });
+    }
+  }
+
+  _y = 0;
+
+  fixX = 0;
+  fixY = 0;
 
   constructor(private cd: ChangeDetectorRef) {}
-
-  ngOnInit(): void {}
 
   updateSize(size: number) {
     this.ringSize = size;
@@ -40,7 +69,10 @@ export class RingCursorComponent implements OnInit {
 
   fix(x: number, y: number) {
     this.isFix = true;
-    this.fixPosition = { x, y };
+    this.x = x;
+    this.fixX = x;
+    this.y = y;
+    this.fixY = y;
     this.cd.markForCheck();
   }
 
@@ -49,7 +81,36 @@ export class RingCursorComponent implements OnInit {
     this.cd.markForCheck();
   }
 
-  onCursorMove(e: CursorMoveEvent) {
-    this.fixPosition = { x: e.x, y: e.y };
+  onCursorMove({ x, y }: CursorMoveEvent) {
+    this.x = x;
+    this.y = y;
   }
+
+  @HostListener('window:mousemove', ['$event'])
+  onMouseMove(e: MouseEvent) {
+    if (!this.isFix) return;
+
+    const offsetX = this.getLogOffset(e.clientX, this.fixX);
+    const offsetY = this.getLogOffset(e.clientY, this.fixY);
+
+    if (offsetX !== -Infinity) {
+      this.x = this.fixX + offsetX;
+    }
+
+    if (offsetY !== -Infinity) {
+      this.y = this.fixY + offsetY;
+    }
+  }
+
+  private getLogOffset(a: number, b: number) {
+    const offset = a - b;
+    const sign = Math.sign(offset);
+    const absLog = getBaseLog(1.5, Math.abs(offset));
+
+    return sign > 0 ? absLog : -absLog;
+  }
+}
+
+function getBaseLog(x: number, y: number) {
+  return Math.log(y) / Math.log(x);
 }

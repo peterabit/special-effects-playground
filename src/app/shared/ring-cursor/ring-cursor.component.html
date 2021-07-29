@@ -7,8 +7,8 @@
 <app-cursor-tracker
     [tracking]="!isFix"
     [enableTransition]="true"
-    [x]="fixPosition.x"
-    [y]="fixPosition.y"
+    [x]="x"
+    [y]="y"
     (cursorMove)="onCursorMove($event)"
 >
     <div

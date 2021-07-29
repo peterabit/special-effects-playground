@@ -4,6 +4,7 @@
   border: 1px solid burlywood;
   border-radius: 50%;
   background-color: transparent;
-  outline: none;
   color: rgb(214, 163, 96);
+  transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  outline: none;
 }
