@@ -15,16 +15,18 @@ export class ParallaxScrollComponent {
   constructor() {}
 
   ngAfterViewInit(): void {
-    this.mainTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.parallax-container',
-        pin: true,
-        start: 'top top-=200',
-        end: '+=500',
-        scrub: 1,
-      },
-    });
+    setTimeout(() => {
+      this.mainTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.parallax-container',
+          pin: true,
+          start: 'top top-=200',
+          end: '+=500',
+          scrub: 1,
+        },
+      });
 
-    this.mainTl.to('.parallax-bg', { y: -500 });
+      this.mainTl.to('.parallax-bg', { y: -500 });
+    }, 0);
   }
 }

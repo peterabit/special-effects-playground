@@ -1,0 +1,8 @@
+<div class="page-header">
+    <a [routerLink]="link">
+        <span #contentRef>
+            <ng-content></ng-content>
+        </span>
+        <ng-container *ngIf="!contentRef.hasChildNodes()">Back</ng-container>
+    </a>
+</div>

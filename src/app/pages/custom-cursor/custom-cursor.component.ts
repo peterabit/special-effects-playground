@@ -30,7 +30,9 @@ export class CustomCursorComponent {
   }
 
   ngAfterViewInit(): void {
-    this.btnCenter = this.getBtnCenter();
+    setTimeout(() => {
+      this.btnCenter = this.getBtnCenter();
+    }, 0);
   }
 
   ngOnDestroy(): void {

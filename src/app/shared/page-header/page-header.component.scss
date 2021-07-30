@@ -1,0 +1,14 @@
+.page-header {
+  position: relative;
+  z-index: 1000;
+  box-shadow: 0 0 4px rgb(138, 138, 138);
+
+  > a {
+    padding: 1rem 2rem;
+    display: block;
+
+    &:hover {
+      background-color: rgb(236, 236, 236);
+    }
+  }
+}

@@ -1,0 +1,21 @@
+<a
+    class="landscape-card"
+    [routerLink]="link"
+    [ngStyle]="{
+      width: width,
+      height: height,
+      cursor: link ? 'pointer' : ''
+    }"
+>
+    <div
+        class="landscape-card-img"
+        [style.backgroundImage]="bgImage"
+    ></div>
+    <div class="landscape-card-overlay"></div>
+    <div
+        class="landscape-card-title"
+        [ngClass]="{'landscape-card-title-dark': color === 'dark'}"
+    >
+        {{ title }}
+    </div>
+</a>
