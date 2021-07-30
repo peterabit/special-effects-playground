@@ -33,6 +33,12 @@ export class CustomCursorComponent {
     this.btnCenter = this.getBtnCenter();
   }
 
+  ngOnDestroy(): void {
+    if (this.cursorRef) {
+      this.cursor.destroy(this.cursorRef);
+    }
+  }
+
   onClick() {
     if (this.cursorRef) {
       this.cursorRef.destroy();

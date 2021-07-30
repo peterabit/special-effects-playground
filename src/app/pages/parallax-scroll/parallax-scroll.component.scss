@@ -1,0 +1,34 @@
+:host {
+  position: relative;
+  display: block;
+  // min-height: 3000px;
+}
+
+.parallax-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.parallax-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.parallax-content {
+  background-color: #fff;
+}
+
+.parallax-hole {
+  height: 500px;
+  border: 10px solid rgb(214, 184, 184);
+  background-color: transparent;
+}
+
+.bg-section {
+  height: 500px;
+  width: 100%;
+}
