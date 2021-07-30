@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
@@ -17,14 +17,14 @@ export class ParallaxScrollComponent {
   ngAfterViewInit(): void {
     this.mainTl = gsap.timeline({
       scrollTrigger: {
-        trigger: '.bg-block',
+        trigger: '.parallax-container',
         pin: true,
-        start: 'top top+=200px',
+        start: 'top top-=200',
         end: '+=500',
         scrub: 1,
       },
     });
 
-    this.mainTl.from('.box', { y: 300, ease: 'none' }).to('.box', { y: -300, ease: 'none' });
+    this.mainTl.to('.parallax-bg', { y: -500 });
   }
 }

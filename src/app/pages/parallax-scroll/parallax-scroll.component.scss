@@ -1,53 +1,34 @@
 :host {
+  position: relative;
   display: block;
-  height: 2000px;
-  position: relative;
+  // min-height: 3000px;
 }
 
-#start_trigger {
-  position: fixed;
-  top: 200px;
-  right: 0;
-  width: 60px;
-  border-top: 1px solid #f5cb13;
-  text-align: right;
-}
-
-.bg-block {
+.parallax-container {
   position: relative;
-  top: 300px;
-  width: 80%;
-  height: 500px;
-  margin: 0 auto;
-  padding-top: 120px;
-  border: 1px solid rgb(209, 209, 209);
   overflow: hidden;
-
-  h3 {
-    text-align: center;
-  }
 }
 
-.box {
+.parallax-bg {
   position: absolute;
-  width: 100px;
-  height: 100px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
 
-  &:nth-of-type(1) {
-    left: 150px;
-    top: 300px;
-    background-color: chocolate;
-  }
+.parallax-content {
+  background-color: #fff;
+}
 
-  &:nth-of-type(2) {
-    left: 390px;
-    top: 240px;
-    background-color: chocolate;
-  }
+.parallax-hole {
+  height: 500px;
+  border: 10px solid rgb(214, 184, 184);
+  background-color: transparent;
+}
 
-  &:nth-of-type(3) {
-    left: 610px;
-    top: 290px;
-    background-color: chocolate;
-  }
+.bg-section {
+  height: 500px;
+  width: 100%;
 }
