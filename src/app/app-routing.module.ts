@@ -12,6 +12,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/parallax-scroll/parallax-scroll.module').then(m => m.ParallaxScrollModule),
   },
   {
+    path: 'dynamic-svg-stroke',
+    loadChildren: () =>
+      import('./pages/dynamic-svg-stroke/dynamic-svg-stroke.module').then(m => m.DynamicSvgStrokeModule),
+  },
+  {
     path: '',
     component: DashboardComponent,
   },
