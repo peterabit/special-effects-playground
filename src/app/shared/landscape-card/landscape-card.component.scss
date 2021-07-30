@@ -12,10 +12,8 @@ $transition-timing: 0.25s ease;
 
   &:hover {
     .landscape-card-title {
-      top: 50%;
-      left: 50%;
       color: rgb(255, 255, 255);
-      transform: translate(-50%, -50%) scale(1.25);
+      font-size: 20px;
     }
 
     .landscape-card-overlay {
@@ -37,13 +35,14 @@ $transition-timing: 0.25s ease;
 
 .landscape-card-title {
   position: absolute;
-  top: 20%;
-  left: 30%;
+  top: 0;
+  left: 0;
   z-index: 2;
+  width: 100%;
+  padding: 12px 16px;
   font-size: 18px;
   color: rgb(255, 255, 255);
-  transform: translate(-50%, -50%);
-  transition: transform $transition-timing, top $transition-timing, left $transition-timing, color $transition-timing;
+  transition: font-size $transition-timing, color $transition-timing;
 
   &-dark {
     color: rgb(63, 63, 63);
