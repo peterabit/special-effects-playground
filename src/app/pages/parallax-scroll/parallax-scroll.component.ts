@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
   templateUrl: './parallax-scroll.component.html',
   styleUrls: ['./parallax-scroll.component.scss'],
 })
-export class ParallaxScrollComponent {
+export class ParallaxScrollComponent implements AfterViewInit, OnDestroy {
   mainTl?: GSAPTimeline;
 
   constructor() {}
@@ -32,7 +32,6 @@ export class ParallaxScrollComponent {
             start: 'top top',
             end: 'bottom top',
             scrub: 0,
-            markers: { startColor: 'green', endColor: 'red' },
           },
         });
       } else {
@@ -45,7 +44,6 @@ export class ParallaxScrollComponent {
               trigger: screen,
               scroller: '.scroll-container',
               scrub: 0,
-              markers: { startColor: 'green', endColor: 'red' },
             },
           },
           {
@@ -55,11 +53,14 @@ export class ParallaxScrollComponent {
               trigger: screen,
               scroller: '.scroll-container',
               scrub: 0,
-              markers: { startColor: 'green', endColor: 'red' },
             },
           }
         );
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.mainTl?.kill();
   }
 }
