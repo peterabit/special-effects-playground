@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
@@ -15,18 +15,51 @@ export class ParallaxScrollComponent {
   constructor() {}
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.mainTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '.parallax-container',
-          pin: true,
-          start: 'top top-=200',
-          end: '+=500',
-          scrub: 1,
-        },
-      });
+    const mainTl = gsap.timeline();
 
-      this.mainTl.to('.parallax-bg', { y: -500 });
-    }, 0);
+    const screens = document.querySelectorAll('.slide-cover-screen');
+
+    screens.forEach((screen, i) => {
+      const bg = screen.querySelector('.slide-cover-bg');
+
+      if (i === 0) {
+        mainTl.to(bg, {
+          y: (screen as HTMLElement).offsetHeight * 0.8,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: screen,
+            scroller: '.scroll-container',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0,
+            markers: { startColor: 'green', endColor: 'red' },
+          },
+        });
+      } else {
+        mainTl.fromTo(
+          bg,
+          {
+            y: -(screen as HTMLElement).offsetHeight * 0.8,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: screen,
+              scroller: '.scroll-container',
+              scrub: 0,
+              markers: { startColor: 'green', endColor: 'red' },
+            },
+          },
+          {
+            y: (screen as HTMLElement).offsetHeight * 0.8,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: screen,
+              scroller: '.scroll-container',
+              scrub: 0,
+              markers: { startColor: 'green', endColor: 'red' },
+            },
+          }
+        );
+      }
+    });
   }
 }
