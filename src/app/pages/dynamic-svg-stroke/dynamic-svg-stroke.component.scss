@@ -1,7 +1,7 @@
-.dynamic-stroke-link {
-  stroke-dasharray: 3000;
-  stroke-dashoffset: 3000;
-  animation: dash 5s linear forwards;
+.dynamic-stroke-line {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: dash 1.5s linear forwards;
   animation-play-state: paused;
 
   &.run {
