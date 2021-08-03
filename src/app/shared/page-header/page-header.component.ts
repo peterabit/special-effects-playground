@@ -9,6 +9,8 @@ import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core
 export class PageHeaderComponent implements OnInit {
   @Input() link: any[] | string = '/';
 
+  @Input() title: any;
+
   constructor() {}
 
   ngOnInit(): void {}
