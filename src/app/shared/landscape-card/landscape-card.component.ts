@@ -1,5 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, SimpleChanges } from '@angular/core';
-import { SafeUrl } from '@angular/platform-browser';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
 @Component({
   selector: 'app-landscape-card',
@@ -10,7 +9,7 @@ import { SafeUrl } from '@angular/platform-browser';
 export class LandscapeCardComponent {
   @Input() title: string = '';
 
-  @Input() img?: string;
+  @Input() image?: string;
 
   @Input() link?: string | any[];
 
@@ -18,10 +17,10 @@ export class LandscapeCardComponent {
 
   @Input() height: string = '160px';
 
-  @Input() color: 'dark' | 'light' = 'light';
+  @Input() theme: 'dark' | 'light' = 'light';
 
   get bgImage() {
-    return `url(${this.img})`;
+    return `url(${this.image})`;
   }
 
   constructor() {}
